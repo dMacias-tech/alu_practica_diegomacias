@@ -1,0 +1,62 @@
+`timescale 1ns / 1ps
+
+module TB_ALU();
+
+ // Entradas
+    reg [3:0] A;
+    reg [3:0] B;
+    reg [1:0] opcode;
+
+    // Salidas
+    wire [6:0] seg;
+    wire [3:0] T;
+    wire [3:0] LED;
+
+    // Instancia del módulo
+    alu_top DUT (
+        .A(A),
+        .B(B),
+        .opcode(opcode),
+        .seg(seg),
+        .T(T),
+        .LED(LED)
+    );
+
+    // Bloque inicial para pruebas
+    initial begin
+        // Caso 1: Suma
+        opcode = 2'b00;
+        A = 4'b0011;  // 3
+        B = 4'b0101;  // 5
+        #10;
+
+        // Caso 2: Resta
+        opcode = 2'b01;
+        A = 4'b0110;  // 6
+        B = 4'b0011;  // 3
+        #10;
+
+        // Caso 3: OR
+        opcode = 2'b10;
+        A = 4'b1010;
+        B = 4'b0101;
+        #10;
+
+        // Caso 4: AND
+        opcode = 2'b11;
+        A = 4'b1100;
+        B = 4'b1010;
+        #10;
+
+        // Caso 5: Overflow
+        opcode = 2'b00;
+        A = 4'b0111;  // 7
+        B = 4'b0001;  // 1
+        #10;
+
+        // Fin
+        #10;
+        $stop;
+    end
+
+endmodule
