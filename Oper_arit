@@ -1,0 +1,33 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: ITESO
+// Engineer: Diego Macias
+//////////////////////////////////////////////////////////////////////////////////
+
+module Oper_arit(
+    input  [3:0] A,
+    input  [3:0] B,
+    input        sel_sub,  // 0 = suma, 1 = resta
+    output [3:0] R,//resultado
+    output       C,        // carry
+    output       O,        // overflow
+    output       N,        // negativo
+    output       Z         // cero
+    );
+
+    wire [3:0] B_comp;
+    wire [4:0] sum;
+    wire       cin;
+
+    assign B_comp = B  ^ {4{sel_sub}};  // complemento si resta
+    assign cin = sel_sub;              
+    assign sum = {1'b0, A} + {1'b0, B_comp} + cin;
+
+    assign R = sum[3:0];
+    assign C = sum[4];
+    assign N = R[3];
+    assign Z = (sum[3:0] == 4'b0000);// si suma es infiferente a 0 da 1 verdadero
+
+    // Overflow 
+assign O = (A[3] ^ B[3] ^ sel_sub) & (A[3] ^ R[3]);
+endmodule
