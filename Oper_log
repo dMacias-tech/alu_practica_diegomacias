@@ -1,0 +1,11 @@
+`timescale 1ns / 1ps
+
+module Oper_log(
+    input  [3:0] A,
+    input  [3:0] B,
+    input        sel_or,  // 0 = AND, 1 = OR
+    output [3:0] R
+    );
+    
+    assign R = sel_or ? (A | B) : (A & B);
+endmodule
